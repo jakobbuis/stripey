@@ -23,3 +23,5 @@ if (mix.inProduction()) {
    .version()
    .purgeCss();
 }
+
+mix.disableSuccessNotifications();
