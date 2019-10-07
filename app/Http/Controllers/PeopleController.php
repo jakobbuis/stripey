@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\Person as PersonResource;
+use App\Person;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -11,8 +13,11 @@ class PeopleController extends Controller
 {
     public function index() : View
     {
-        $people = Cache::get('people');
+        $all = Person::orderBy('name')->get();
+        $people = PersonResource::collection($all);
+
         $user = Session::get('oauth.user');
+
         return view('people.index', compact('people', 'user'));
     }
 }
