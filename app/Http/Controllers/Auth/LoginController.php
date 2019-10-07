@@ -35,4 +35,10 @@ class LoginController extends Controller
 
         return redirect()->route('people.index');
     }
+
+    public function logout() : RedirectResponse
+    {
+        Session::forget('oauth');
+        return redirect()->route('people.index');
+    }
 }
