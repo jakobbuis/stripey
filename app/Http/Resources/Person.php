@@ -11,6 +11,7 @@ class Person extends JsonResource
         return [
             'name' => $this->name,
             'avatar' => $this->avatar(),
+            'location' => $this->location(),
         ];
     }
 }
