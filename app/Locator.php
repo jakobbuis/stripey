@@ -12,7 +12,7 @@ class Locator
 {
     public function locate(Person $person) : string
     {
-        $calendar = Calendar::forPerson($person);
+        $calendar = new Calendar($person->email);
 
         $event = $calendar->currentEvent();
         if ($event) {

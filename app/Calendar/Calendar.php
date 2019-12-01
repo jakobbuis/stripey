@@ -11,11 +11,6 @@ use Google_Service_Calendar;
  */
 class Calendar
 {
-    public static function forPerson(Person $person): self
-    {
-        return new self($person->email);
-    }
-
     private $now;
     private $events;
 
