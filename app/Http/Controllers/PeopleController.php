@@ -16,7 +16,7 @@ class PeopleController extends Controller
     {
         $user = Session::get('oauth.user');
 
-        if (!$this->workingHours()) {
+        if (!$this->workingHours() && config('app.env') === 'production') {
             return view('outside_working_hours', compact('user'));
         }
 
