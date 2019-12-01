@@ -19,7 +19,14 @@ class Event
 
     public function until(): string
     {
-        $end = Carbon::parse($this->googleEvent->end->dateTime ?? $this->googleEvent->end->date);
+        if (!empty($this->googleEvent->end->dateTime)) {
+            // If an end time is set, use that
+            $end = Carbon::parse($this->googleEvent->end->dateTime);
+        } else {
+            // Otherwise use COB
+            $end = Carbon::parse($this->googleEvent->end->date);
+            $end->setTime('17:30');
+        }
 
         return $end->formatLocalized('%H:%M');
     }
