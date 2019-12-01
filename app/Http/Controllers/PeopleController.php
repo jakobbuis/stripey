@@ -16,7 +16,7 @@ class PeopleController extends Controller
     {
         $user = Session::get('oauth.user');
 
-        if (!$this->workingHours() && config('app.env') === 'production') {
+        if (!$this->workingHours()) {
             return view('outside_working_hours', compact('user'));
         }
 
@@ -32,7 +32,9 @@ class PeopleController extends Controller
      */
     public function workingHours() : bool
     {
-        $now = Carbon::now();
+        $override = config('time.carbon_override');
+        $now = $override ? Carbon::parse($override) : Carbon::now();
+
         $sob = config('time.sob');
         $cob = config('time.cob');
 
