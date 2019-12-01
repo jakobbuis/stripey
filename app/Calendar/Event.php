@@ -25,7 +25,7 @@ class Event
         } else {
             // Otherwise use COB
             $end = Carbon::parse($this->googleEvent->end->date);
-            $end->setTime('17:30');
+            $end->setTime(config('time.cob'));
         }
 
         return $end->formatLocalized('%H:%M');

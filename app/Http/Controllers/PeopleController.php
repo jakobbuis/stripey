@@ -33,8 +33,8 @@ class PeopleController extends Controller
     public function workingHours() : bool
     {
         $now = Carbon::now();
-        $sob = new Carbon('09:00');
-        $cob = new Carbon('17:30');
+        $sob = config('time.sob');
+        $cob = config('time.cob');
 
         return $now->isWeekday() && $now >= $sob && $now <= $cob;
     }
