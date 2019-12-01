@@ -31,7 +31,7 @@ class Calendar
 
     private function determineNow(): CarbonImmutable
     {
-        $override = config('calendars.carbon_override');
+        $override = config('time.carbon_override');
         return $override ? CarbonImmutable::parse($override) : CarbonImmutable::now();
     }
 
