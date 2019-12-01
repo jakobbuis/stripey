@@ -6,10 +6,9 @@
             Your colleagues aren't working
         </h1>
         <p class="mb-4">
-            <em>And neither should you.</em> Its currently
-            {{ Carbon\Carbon::now()->format('H:i') }} (outside of our regular
-            working hours). We are ethically unable to determine the
-            whereabouts of your colleagues.
+            <em>And neither should you.</em> You are trying to access Stripey
+            outside of our regular working hours. We are unable to determine the
+            whereabouts of your colleagues, due to ethical considerations.
         </p>
         <p>
             Go, and enjoy your time outside of work!
