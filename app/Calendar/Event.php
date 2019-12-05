@@ -30,4 +30,9 @@ class Event
 
         return $end->formatLocalized('%H:%M');
     }
+
+    public function summary(): ?string
+    {
+        return $this->googleEvent->summary;
+    }
 }
