@@ -17,6 +17,9 @@ class Locator
         $event = $calendar->currentEvent();
         if ($event) {
             $output = "in a meeting until {$event->until()}";
+            if ($event->location()) {
+                $output .=  " in the {$event->location()}";
+            }
             if ($event->summary()) {
                 $output .= " ({$event->summary()})";
             }
