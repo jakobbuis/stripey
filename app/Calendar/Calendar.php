@@ -18,7 +18,23 @@ class Calendar
     {
         // Allow time-shifting for easier testing
         $this->now = $this->determineNow();
+        $this->loadEvents($calendarIdentifier);
+    }
 
+    /**
+     * Allow time-shifting for easier testing
+     */
+    private function determineNow(): CarbonImmutable
+    {
+        $override = config('time.carbon_override');
+        return $override ? CarbonImmutable::parse($override) : CarbonImmutable::now();
+    }
+
+    /**
+     * Load all relevant events for today
+     */
+    private function loadEvents(string $calendarIdentifier): void
+    {
         // Load the events for today in this class
         $calendar = app(Google_Service_Calendar::class);
         $query = [
@@ -27,12 +43,6 @@ class Calendar
             'singleEvents' => true, // Expand recurring events into separate instances
         ];
         $this->events = collect($calendar->events->listEvents($calendarIdentifier, $query)->items);
-    }
-
-    private function determineNow(): CarbonImmutable
-    {
-        $override = config('time.carbon_override');
-        return $override ? CarbonImmutable::parse($override) : CarbonImmutable::now();
     }
 
     public function currentEvent(): ?Event
