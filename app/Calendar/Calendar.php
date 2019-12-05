@@ -42,7 +42,17 @@ class Calendar
             'timeMax' => $this->now->endOfDay()->toRfc3339String(),
             'singleEvents' => true, // Expand recurring events into separate instances
         ];
-        $this->events = collect($calendar->events->listEvents($calendarIdentifier, $query)->items);
+        $events = collect($calendar->events->listEvents($calendarIdentifier, $query)->items);
+
+        // Filter out events created by Timewax
+        $events = $events->filter(function ($event) {
+            if (empty($event->description)) {
+                return true;
+            }
+            return strpos($event->description, 'Timewax boeking') === 0;
+        });
+
+        $this->events = $events;
     }
 
     public function currentEvent(): ?Event
