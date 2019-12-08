@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\Person as PersonResource;
 use App\Person;
+use App\Time;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
@@ -12,11 +13,11 @@ use Illuminate\Support\Facades\Session;
 
 class PeopleController extends Controller
 {
-    public function index() : View
+    public function index(Time $time): View
     {
         $user = Session::get('oauth.user');
 
-        if (!$this->workingHours()) {
+        if (!$time->isWorkingHours()) {
             return view('outside_working_hours', compact('user'));
         }
 
@@ -25,19 +26,5 @@ class PeopleController extends Controller
 
 
         return view('people.index', compact('people', 'user'));
-    }
-
-    /**
-     * Determine if we are current inside working hours (9AM - 17:30)
-     */
-    public function workingHours() : bool
-    {
-        $override = config('time.carbon_override');
-        $now = $override ? Carbon::parse($override) : Carbon::now();
-
-        $sob = config('time.sob');
-        $cob = config('time.cob');
-
-        return $now->isWeekday() && $now >= $sob && $now <= $cob;
     }
 }

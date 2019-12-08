@@ -3,6 +3,7 @@
 namespace App\Calendar;
 
 use App\Person;
+use App\Time;
 use Carbon\CarbonImmutable;
 use Google_Service_Calendar;
 
@@ -17,17 +18,8 @@ class Calendar
     public function __construct(string $calendarIdentifier)
     {
         // Allow time-shifting for easier testing
-        $this->now = $this->determineNow();
+        $this->now = app(Time::class)->now();
         $this->loadEvents($calendarIdentifier);
-    }
-
-    /**
-     * Allow time-shifting for easier testing
-     */
-    private function determineNow(): CarbonImmutable
-    {
-        $override = config('time.carbon_override');
-        return $override ? CarbonImmutable::parse($override) : CarbonImmutable::now();
     }
 
     /**

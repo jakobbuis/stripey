@@ -4,12 +4,12 @@ return [
     /*
      * Start of the business day
      */
-    'sob' => new \Carbon\Carbon('09:00'),
+    'sob' => '09:00',
 
     /*
      * Close of business
      */
-    'cob' => new \Carbon\Carbon('17:30'),
+    'cob' => '17:30',
 
     /**
      * A lot of logic in stripey is dependent on the current day, which makes it
