@@ -10,14 +10,14 @@ use Carbon\CarbonImmutable;
  */
 class Time
 {
-    private $override;
     private $now;
 
     public function __construct()
     {
-        $this->override = config('time.carbon_override');
-        if ($this->override) {
-            $this->now = CarbonImmutable::parse($this->override);
+        $override = config('time.carbon_override');
+
+        if ($override) {
+            $this->now = CarbonImmutable::parse($override);
         } else {
             $this->now = CarbonImmutable::now();
         }
