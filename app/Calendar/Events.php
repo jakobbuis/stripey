@@ -32,4 +32,18 @@ class Events extends Collection
             return $noDescription || !$timewaxEvent;
         });
     }
+
+    /**
+     * Only include "Going" and "maybe" events
+     */
+    public function attending(string $email): self
+    {
+        return $this->filter(function ($event) use ($email) {
+            $attendees = $event->attendees;
+            $me = array_filter($attendees, function ($attendee) use ($email) {
+                return $attendee->email === $email;
+            })[0];
+            return in_array($me->responseStatus, ['accepted', 'tentative']);
+        });
+    }
 }

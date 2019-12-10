@@ -43,6 +43,7 @@ class Calendar
         return $this->events
                     ->at($this->now)
                     ->notTimewax()
+                    ->attending($this->calendarIdentifier)
                     ->first();
     }
 }
