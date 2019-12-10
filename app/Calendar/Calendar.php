@@ -38,11 +38,10 @@ class Calendar
 
         // Filter out events created by Timewax
         $events = $events->filter(function ($event) {
-            if (empty($event->description)) {
-                return true;
-            }
-            return strpos($event->description, 'Timewax boeking') === 0;
-        });
+            $noDescription = empty($event->description);
+            $timewaxEvent = strpos($event->description, 'Timewax boeking') !== false;
+            return $noDescription || !$timewaxEvent;
+        })->values();
 
         $this->events = $events;
     }
