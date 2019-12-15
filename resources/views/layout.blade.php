@@ -13,7 +13,7 @@
     <!-- Styles -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 </head>
-<body class="bg-gray-100 h-screen antialiased leading-none">
+<body class="bg-gray-200 h-screen antialiased leading-none">
     <div id="app">
         <header>
             <div class="bg-blue-800 p-4 flex justify-between">
