@@ -40,10 +40,12 @@ class Calendar
 
     public function currentEvent(): ?Event
     {
-        return $this->events
+        $event = $this->events
                     ->at($this->now)
                     ->notTimewax()
                     ->attending($this->calendarIdentifier)
                     ->first();
+
+        return $event ? new Event($event) : null;
     }
 }
