@@ -12,7 +12,7 @@ class Person extends Model
     public function avatar() : string
     {
         $hash = md5(strtolower(trim($this->email)));
-        return "https://www.gravatar.com/avatar/{$hash}?s=32";
+        return "https://www.gravatar.com/avatar/{$hash}?s=256";
     }
 
     public function location() : string
