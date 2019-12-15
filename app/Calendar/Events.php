@@ -34,15 +34,24 @@ class Events extends Collection
     }
 
     /**
-     * Only include "Going" and "maybe" events
+     * Only include events this $email is attending
      */
     public function attending(string $email): self
     {
         return $this->filter(function ($event) use ($email) {
-            $attendees = $event->attendees;
+            $attendees = $event->attendees ?? [];
+            if (count($attendees) === 0) {
+                // If no attendees are set (but it is on our calendar), assume we are going
+                return true;
+            }
+            // Otherwise, check our response
             $me = array_filter($attendees, function ($attendee) use ($email) {
                 return $attendee->email === $email;
-            })[0];
+            });
+            if (count($me) === 0) {
+                // If we are not listed as an attendee (but it is on our calendar), assume we are going
+                return true;
+            }
             return in_array($me->responseStatus, ['accepted', 'tentative']);
         });
     }
