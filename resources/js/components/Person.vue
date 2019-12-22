@@ -15,16 +15,22 @@
 <script>
 import AtOffice from './status/AtOffice';
 import InMeeting from './status/InMeeting';
+import OutSick from './status/OutSick';
+import DayOff from './status/DayOff';
+import OnVacation from './status/OnVacation';
 
 export default {
     props: ['person'],
-    components: { AtOffice, InMeeting },
+    components: { AtOffice, InMeeting, OutSick, DayOff, OnVacation },
 
     computed: {
         statusComponent() {
             return {
                 at_office: 'at-office',
                 in_meeting: 'in-meeting',
+                out_sick: 'out-sick',
+                day_off: 'day-off',
+                on_vacation: 'on-vacation',
             }[this.person.status.state];
         },
     },

@@ -48,4 +48,28 @@ class Calendar
 
         return $event ? new Event($event) : null;
     }
+
+    public function isOutSick(): bool
+    {
+        return $this->events
+                    ->onAfwezig()
+                    ->startsWith('Ziek:')
+                    ->count() > 0;
+    }
+
+    public function hasDayOff(): bool
+    {
+        return $this->events
+                    ->onAfwezig()
+                    ->startsWith('Vrij:')
+                    ->count() > 0;
+    }
+
+    public function onVacation(): bool
+    {
+        return $this->events
+                    ->onAfwezig()
+                    ->startsWith('Vakantie:')
+                    ->count() > 0;
+    }
 }

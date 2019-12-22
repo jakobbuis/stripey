@@ -55,4 +55,19 @@ class Events extends Collection
             return in_array($me[0]->responseStatus, ['accepted', 'tentative']);
         });
     }
+
+    public function onAfwezig(): self
+    {
+        return $this->filter(function ($event) {
+            return $event->organizer->email === config('calendars.afwezig');
+        });
+    }
+
+    public function startsWith(string $prefix): self
+    {
+        return $this->filter(function ($event) use ($prefix) {
+            $summary = trim($event->summary);
+            return strpos($summary, $prefix) === 0;
+        });
+    }
 }

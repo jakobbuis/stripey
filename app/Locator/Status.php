@@ -17,6 +17,21 @@ class Status
         return new self('in_meeting', compact('until', 'location', 'summary'));
     }
 
+    public static function outSick(): self
+    {
+        return new self('out_sick');
+    }
+
+    public static function dayOff(): self
+    {
+        return new self('day_off');
+    }
+
+    public static function onVacation(): self
+    {
+        return new self('on_vacation');
+    }
+
     private function __construct(string $state, array $data = [])
     {
         $this->state = $state;

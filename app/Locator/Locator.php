@@ -18,6 +18,18 @@ class Locator
     {
         $calendar = new Calendar($this->person->email);
 
+        if ($calendar->isOutSick()) {
+            return Status::outSick();
+        }
+
+        if ($calendar->hasDayOff()) {
+            return Status::dayOff();
+        }
+
+        if ($calendar->onVacation()) {
+            return Status::onVacation();
+        }
+
         $event = $calendar->currentEvent();
         if ($event) {
             return Status::inMeeting(
