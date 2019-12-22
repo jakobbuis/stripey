@@ -16,7 +16,7 @@ class Locator
 
     public function status(): Status
     {
-        $calendar = new Calendar($this->person->email);
+        $calendar = new Calendar($this->person->id, $this->person->email);
 
         if ($calendar->isOutSick()) {
             return Status::outSick();

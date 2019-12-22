@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\StoredTokens;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Session;
@@ -26,12 +27,13 @@ class LoginController extends Controller
     public function handleProviderCallback() : RedirectResponse
     {
         $user = Socialite::driver('google')->user();
+        $token = $user->token;
+        $expiresAt = Carbon::now()->addSeconds($user->expiresIn);
 
-        Session::put('oauth', [
-            'token' => $user->token,
-            'expiresAt' => Carbon::now()->addSeconds($user->expiresIn),
-            'user' => $user,
-        ]);
+        Session::put('oauth', compact('token', 'expiresAt', 'user'));
+
+        // Store the token in cache for use in background jobs
+        StoredTokens::store($token, $expiresAt);
 
         return redirect()->route('people.index');
     }
