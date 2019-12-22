@@ -1,5 +1,5 @@
 <template>
-    <div class="max-w-sm rounded overflow-hidden shadow-lg m-4 bg-white">
+    <div class="max-w-sm rounded overflow-hidden shadow-lg m-4 bg-white border-l-8" :class="statusColor">
         <div class="px-6 py-4 flex">
             <div class="flex-none mr-4">
                 <img :src="person.avatar" class="rounded-full w-12" width="64" height="64">
@@ -31,6 +31,16 @@ export default {
                 out_sick: 'out-sick',
                 day_off: 'day-off',
                 on_vacation: 'on-vacation',
+            }[this.person.status.state];
+        },
+
+        statusColor() {
+            return {
+                at_office: 'border-green-400',
+                in_meeting: 'border-yellow-400',
+                out_sick: 'border-red-400',
+                day_off: 'border-red-400',
+                on_vacation: 'border-red-400',
             }[this.person.status.state];
         },
     },
