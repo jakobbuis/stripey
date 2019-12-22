@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Person;
 use App\StoredTokens;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
@@ -31,6 +32,11 @@ class LoginController extends Controller
         $expiresAt = Carbon::now()->addSeconds($user->expiresIn);
 
         Session::put('oauth', compact('token', 'expiresAt', 'user'));
+
+        // Store the profile picture
+        $person = Person::firstOrCreate(['email' => $user->email]);
+        $person->photo = $user->avatar;
+        $person->save();
 
         // Store the token in cache for use in background jobs
         StoredTokens::store($token, $expiresAt);
