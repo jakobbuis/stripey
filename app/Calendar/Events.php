@@ -52,6 +52,7 @@ class Events extends Collection
                 // If we are not listed as an attendee (but it is on our calendar), assume we are going
                 return true;
             }
+            $me = array_values($me); // reset the keys
             return in_array($me[0]->responseStatus, ['accepted', 'tentative']);
         });
     }
