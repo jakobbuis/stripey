@@ -17,6 +17,6 @@ class Person extends Model
 
         // Fallback to Gravatar
         $hash = md5(strtolower(trim($this->email)));
-        return "https://www.gravatar.com/avatar/{$hash}?s=256";
+        return "https://www.gravatar.com/avatar/{$hash}?s=96";
     }
 }
