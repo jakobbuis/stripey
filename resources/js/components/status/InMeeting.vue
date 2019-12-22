@@ -6,7 +6,9 @@
         </p>
         <p class="text-gray-700 inline-flex items-center" v-if="data.location">
             <img src="/images/icons/location.svg" class="mr-1">
-            <span>{{ data.location }}</span>
+            <span class="truncate">
+                {{ data.location }}
+            </span>
         </p>
     </div>
 </template>
