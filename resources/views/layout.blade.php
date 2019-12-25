@@ -24,12 +24,18 @@
                     @yield('nav')
                 </div>
 
-                <div class="ml-4 rounded p-2 text-white flex" style="background-color:rgba(255, 255, 255, 0.1);">
-                    <img src="{{ $user->avatar }}" alt="{{ $user->name }}" heigth="24" width="24"
-                         class="rounded-full">
-                    <a href="{{ route('logout') }}" class="ml-2 align-baseline my-auto hover:underline">
-                        Sign&nbsp;out
+                <div class="flex">
+                    <a href="{{ config('support.support_url') }}" class="my-auto">
+                        <img src="/images/icons/help.svg" alt="Help">
                     </a>
+
+                    <div class="ml-4 rounded p-2 text-white flex" style="background-color:rgba(255, 255, 255, 0.1);">
+                        <img src="{{ $user->avatar }}" alt="{{ $user->name }}" heigth="24" width="24"
+                             class="rounded-full">
+                        <a href="{{ route('logout') }}" class="ml-2 align-baseline my-auto hover:underline">
+                            Sign&nbsp;out
+                        </a>
+                    </div>
                 </div>
 
             </div>
