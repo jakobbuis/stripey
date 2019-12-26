@@ -25,6 +25,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command(\App\Console\Commands\LoadCalendars::class)->everyTenMinutes();
+        $schedule->command(\App\Console\Commands\RefreshStoredTokens::class)->everyFifteenMinutes();
     }
 
     /**

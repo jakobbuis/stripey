@@ -30,25 +30,7 @@ class StoredTokens
             return null;
         }
 
-        // Check if we have a token that is fresh for atleast one more minute
-        $token = self::freshInSet($tokens);
-        if ($token) {
-            return $token;
-        }
-
-        // If not, all tokens are expired, so refresh them all
-        $tokens = self::refreshTokens();
-
-        // And return a fresh token (or null if all refreshes failed)
-        return self::freshInSet($tokens);
-    }
-
-    /**
-     * Iterate over a set of tokens and return the first one that is valid for
-     * more than 60 seconds
-     */
-    private static function freshInSet(array $tokens): ?object
-    {
+        // Find the tokens that are fresh for atleast one more minute
         $freshTokens = array_values(array_filter($tokens, function ($token) {
             return $token->expiresAt > Carbon::now()->addMinute();
         }));
@@ -59,12 +41,17 @@ class StoredTokens
     /**
      * Refresh all tokens in cache
      */
-    private static function refreshTokens(): array
+    public static function refreshTokens(): void
     {
-        Cache::lock(static::$lockKey, 5)->get(function () {
+        Cache::lock(static::$lockKey, 30)->get(function () {
             $tokens = Cache::get(self::$cacheKey) ?? [];
 
             foreach ($tokens as $token) {
+                // Only refresh tokens that are going to expire in the next fifteen minutes
+                if ($token->expiresAt > Carbon::now()->addMinutes(15)) {
+                    continue;
+                }
+
                 // Laravel Socialite doesn't include functionality to refresh tokens,
                 // so we instantiate the Google API Client with only the refresh
                 // token to do that for us.
@@ -78,7 +65,5 @@ class StoredTokens
 
             Cache::put(static::$cacheKey, $tokens);
         });
-
-        return Cache::get(self::$cacheKey);
     }
 }
