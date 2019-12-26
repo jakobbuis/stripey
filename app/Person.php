@@ -8,7 +8,7 @@ class Person extends Model
 {
     protected $fillable = ['name', 'email', 'photo'];
 
-    public function avatar() : string
+    public function avatar(): string
     {
         // Once a user logs in, we store their avatar URL
         if ($this->photo) {

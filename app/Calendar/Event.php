@@ -64,6 +64,6 @@ class Event
             return null;
         }
 
-       return $location;
+        return $location;
     }
 }
