@@ -11,44 +11,74 @@ use Illuminate\Support\Facades\Cache;
 class StoredTokens
 {
     private static $cacheKey = 'oauth.tokens';
+    private static $lockKey = 'oauth_tokens_lock';
 
-    public static function store(string $token, Carbon $expiresAt): void
+    public static function store(string $token, string $refreshToken, Carbon $expiresAt): void
     {
-        Cache::lock('oauth', 5)->get(function () use ($token, $expiresAt) {
+        Cache::lock(static::$lockKey, 5)->get(function () use ($token, $refreshToken, $expiresAt) {
             $tokens = Cache::get(static::$cacheKey, []);
-            $tokens[] = (object) compact('token', 'expiresAt');
+            $tokens[] = (object) compact('token', 'refreshToken', 'expiresAt');
             Cache::put(static::$cacheKey, $tokens);
         });
     }
 
     public static function validToken(): ?string
     {
-        self::cleanTokens();
-
+        // If we have zero tokens on file -> null
         $tokens = Cache::get(self::$cacheKey);
         if (!is_array($tokens) || count($tokens) < 1) {
             return null;
         }
 
-        return $tokens[0]->token;
+        // Check if we have a token that is fresh for atleast one more minute
+        $token = self::freshInSet($tokens);
+        if ($token) {
+            return $token;
+        }
+
+        // If not, all tokens are expired, so refresh them all
+        $tokens = self::refreshTokens();
+
+        // And return a fresh token (or null if all refreshes failed)
+        return self::freshInSet($tokens);
     }
 
-    private static function cleanTokens(): void
+    /**
+     * Iterate over a set of tokens and return the first one that is valid for
+     * more than 60 seconds
+     */
+    private static function freshInSet(array $tokens): ?object
     {
-        Cache::lock('oauth', 5)->get(function () {
-            $tokens = Cache::get(static::$cacheKey, []);
+        $freshTokens = array_values(array_filter($tokens, function ($token) {
+            return $token->expiresAt > Carbon::now()->addMinute();
+        }));
 
-            $now = Carbon::now();
-            $freshTokens = array_filter($tokens, function ($token) use ($now) {
-                return $token->expiresAt > $now;
-            });
+        return $freshTokens[0] ?? null;
+    }
 
-            // Sort tokens freshest first
-            usort($freshTokens, function ($a, $b) {
-                return $a->expiresAt <=> $b->expiresAt;
-            });
+    /**
+     * Refresh all tokens in cache
+     */
+    private static function refreshTokens(): array
+    {
+        Cache::lock(static::$lockKey, 5)->get(function () {
+            $tokens = Cache::get(self::$cacheKey) ?? [];
 
-            Cache::put(static::$cacheKey, $freshTokens);
+            foreach ($tokens as $token) {
+                // Laravel Socialite doesn't include functionality to refresh tokens,
+                // so we instantiate the Google API Client with only the refresh
+                // token to do that for us.
+                $client = new Google_Client();
+                $client->setClientId(config('services.google.client_id'));
+                $client->setClientSecret(config('services.google.client_secret'));
+                $client->setAccessType('offline');
+                $client->refreshToken($token->refreshToken);
+                $token->token = $client->getAccessToken();
+            }
+
+            Cache::put(static::$cacheKey, $tokens);
         });
+
+        return Cache::get(self::$cacheKey);
     }
 }

@@ -19,6 +19,7 @@ class LoginController extends Controller
     {
         return Socialite::driver('google')
             ->scopes(['https://www.googleapis.com/auth/calendar.events.readonly'])
+            ->with(['access_type' => 'offline', 'prompt' => 'consent'])
             ->redirect();
     }
 
@@ -29,6 +30,7 @@ class LoginController extends Controller
     {
         $user = Socialite::driver('google')->user();
         $token = $user->token;
+        $refreshToken = $user->refreshToken;
         $expiresAt = Carbon::now()->addSeconds($user->expiresIn);
 
         Session::put('oauth', compact('token', 'expiresAt', 'user'));
@@ -39,7 +41,7 @@ class LoginController extends Controller
         $person->save();
 
         // Store the token in cache for use in background jobs
-        StoredTokens::store($token, $expiresAt);
+        StoredTokens::store($token, $refreshToken, $expiresAt);
 
         return redirect()->route('people.index');
     }
