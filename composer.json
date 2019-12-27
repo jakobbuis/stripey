@@ -23,6 +23,7 @@
         "laravel-frontend-presets/tailwindcss": "^2.0",
         "mockery/mockery": "^1.0",
         "nunomaduro/collision": "^3.0",
+        "nunomaduro/larastan": "^0.5.0",
         "phpunit/phpunit": "^8.0"
     },
     "config": {
