@@ -16,6 +16,6 @@ class RefreshStoredTokens extends Command
 
     public function handle()
     {
-        StoredTokens::refresh();
+        StoredTokens::refreshTokens();
     }
 }
