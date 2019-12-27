@@ -36,7 +36,7 @@ class StoredTokens
             return $token->expiresAt > Carbon::now()->addMinute();
         }));
 
-        return $freshTokens[0] ?? null;
+        return $freshTokens[0]->token ?? null;
     }
 
     /**
