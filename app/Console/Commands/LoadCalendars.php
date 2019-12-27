@@ -53,7 +53,7 @@ class LoadCalendars extends Command
                 'singleEvents' => true, // Expand recurring events into separate instances
             ])->items;
 
-            Cache::put("person.{$person->id}.calendar", $events);
+            Cache::forever("person.{$person->id}.calendar", $events);
             Log::debug("Loaded calendar", ['person' => $person->id, 'events_count' => count($events)]);
         });
 

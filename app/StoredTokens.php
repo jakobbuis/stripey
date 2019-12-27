@@ -3,6 +3,7 @@
 namespace App;
 
 use Carbon\Carbon;
+use Google_Client;
 use Illuminate\Support\Facades\Cache;
 
 /**
@@ -18,7 +19,7 @@ class StoredTokens
         Cache::lock(static::$lockKey, 5)->get(function () use ($token, $refreshToken, $expiresAt) {
             $tokens = Cache::get(static::$cacheKey, []);
             $tokens[] = (object) compact('token', 'refreshToken', 'expiresAt');
-            Cache::put(static::$cacheKey, $tokens);
+            Cache::forever(static::$cacheKey, $tokens);
         });
     }
 
@@ -63,7 +64,7 @@ class StoredTokens
                 $token->token = $client->getAccessToken();
             }
 
-            Cache::put(static::$cacheKey, $tokens);
+            Cache::forever(static::$cacheKey, $tokens);
         });
     }
 }
