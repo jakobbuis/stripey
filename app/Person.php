@@ -11,7 +11,7 @@ class Person extends Model
     public function avatar(): string
     {
         // Once a user logs in, we store their avatar URL
-        if ($this->photo) {
+        if (!empty($this->photo)) {
             return $this->photo;
         }
 
