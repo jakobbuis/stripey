@@ -64,7 +64,11 @@ class StoredTokens
                 $client->setClientSecret(config('services.google.client_secret'));
                 $client->setAccessType('offline');
                 $client->refreshToken($token->refreshToken);
-                $token->token = $client->getAccessToken();
+
+                // Store the new details on the existing token (preserving the refresh token)
+                $newToken = (object) $client->getAccessToken();
+                $token->token = $newToken->access_token;
+                $token->expiresAt = Carbon::createFromTimestamp($newToken->created)->addSeconds($newToken->expires_in - 100);
             }
 
             Cache::forever(static::$cacheKey, $tokens);
