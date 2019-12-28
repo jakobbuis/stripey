@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\StoredTokens;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Refresh all OAuth tokens on file that are going to expire in the next
@@ -16,6 +17,7 @@ class RefreshStoredTokens extends Command
 
     public function handle()
     {
+        Log::debug('Refreshing OAuth tokens');
         StoredTokens::refreshTokens();
     }
 }
