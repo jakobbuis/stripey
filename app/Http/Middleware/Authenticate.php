@@ -2,31 +2,20 @@
 
 namespace App\Http\Middleware;
 
-use Carbon\Carbon;
-use Closure;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Auth\Middleware\Authenticate as Middleware;
 
-class Authenticate
+class Authenticate extends Middleware
 {
     /**
-     * Force a user to the homepage, unless logged-in
+     * Get the path the user should be redirected to when they are not authenticated.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return string|null
      */
-    public function handle(Request $request, Closure $next)
+    protected function redirectTo($request)
     {
-        // Must have a token
-        if (!Session::has('oauth.token')) {
-            Session::forget('oauth');
-            return redirect()->route('login');
+        if (! $request->expectsJson()) {
+            return route('info');
         }
-
-        // Token must still be fresh
-        $expiry = Session::get('oauth.expiresAt');
-        if ($expiry <= Carbon::now()) {
-            Session::forget('oauth');
-            return redirect()->route('login');
-        }
-
-        return $next($request);
     }
 }

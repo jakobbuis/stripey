@@ -15,16 +15,14 @@ class PeopleController extends Controller
 {
     public function index(Time $time): View
     {
-        $user = Session::get('oauth.user');
-
         if (!$time->isWorkingHours()) {
-            return view('outside_working_hours', compact('user'));
+            return view('outside_working_hours');
         }
 
         $all = Person::orderBy('name')->get();
         $people = PersonResource::collection($all);
 
 
-        return view('people.index', compact('people', 'user'));
+        return view('people.index', compact('people'));
     }
 }

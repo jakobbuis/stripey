@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Person;
 use App\StoredTokens;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Socialite;
 
@@ -28,19 +30,26 @@ class LoginController extends Controller
      */
     public function handleProviderCallback(): RedirectResponse
     {
-        $user = Socialite::driver('google')->user();
-        $token = $user->token;
-        $refreshToken = $user->refreshToken;
-        $expiresAt = Carbon::now()->addSeconds($user->expiresIn);
+        $socialUser = Socialite::driver('google')->user();
 
-        Session::put('oauth', compact('token', 'expiresAt', 'user'));
+        // Find or create an related user
+        $internalUser = User::firstOrNew(['email' => $socialUser->email]);
+        $internalUser->name = $socialUser->name;
+        $internalUser->photo = $socialUser->avatar;
+        $internalUser->save();
+        Auth::login($internalUser);
 
-        // Store the profile picture
-        $person = Person::firstOrCreate(['email' => $user->email]);
-        $person->photo = $user->avatar;
+        // If this user is not a person yet, create it
+        $person = Person::firstOrNew(['email' => $socialUser->email]);
+        $person->name = $socialUser->name;
+        $person->email = $socialUser->email;
+        $person->photo = $socialUser->avatar;
         $person->save();
 
         // Store the token in cache for use in background jobs
+        $token = $socialUser->token;
+        $refreshToken = $socialUser->refreshToken;
+        $expiresAt = Carbon::now()->addSeconds($socialUser->expiresIn);
         StoredTokens::store($token, $refreshToken, $expiresAt);
 
         return redirect()->route('people.index');
@@ -48,7 +57,7 @@ class LoginController extends Controller
 
     public function logout(): RedirectResponse
     {
-        Session::forget('oauth');
-        return redirect()->route('people.index');
+        Auth::logout();
+        return redirect()->route('info');
     }
 }

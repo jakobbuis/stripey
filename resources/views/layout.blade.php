@@ -29,12 +29,18 @@
                         <img src="/images/icons/help.svg" alt="Help">
                     </a>
 
+
                     <div class="ml-4 rounded p-2 text-white flex" style="background-color:rgba(255, 255, 255, 0.1);">
-                        <img src="{{ $user->avatar }}" alt="{{ $user->name }}" heigth="24" width="24"
-                             class="rounded-full">
-                        <a href="{{ route('logout') }}" class="ml-2 align-baseline my-auto hover:underline">
-                            Sign&nbsp;out
-                        </a>
+                        @php($user = Auth::user())
+                        @if($user)
+                            <img src="{{ $user->avatar() }}" alt="{{ $user->name }}" heigth="24" width="24"
+                                 class="rounded-full">
+                            <a href="{{ route('logout') }}" class="ml-2 align-baseline my-auto hover:underline">
+                                Sign&nbsp;out
+                            </a>
+                        @else
+                            <a href="{{ route('login') }}" class="align-baseline my-auto hover:underline">Sign&nbsp;in</a>
+                        @endif
                     </div>
                 </div>
 
