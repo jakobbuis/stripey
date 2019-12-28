@@ -7,7 +7,8 @@
             Looking for someone? Stripey helps you find your colleagues during work hours. Through meticulous analysis of their agendas, Stripey can determine whether the person you're looking for is likely in a meeting, working from home, or on vacation.
         </p>
         <p>
-            Stripey needs access to read your Google Calendar to work. The information is only be stored temporarily, and is regularly discarded.
+            Stripey needs access to read your Google Calendar to work. The information is only be stored temporarily, and is regularly discarded. Additionally, Stripey is unavailable outside of
+            regular working hours: your private time will remain private.
         </p>
     </div>
 
