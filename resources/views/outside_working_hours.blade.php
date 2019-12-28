@@ -1,17 +1,17 @@
-@extends('layouts/master')
+@extends('layouts/landing')
 
-@section('main')
-    <div class="m-4 max-w-md">
+@section('content')
+    <div>
         <h1 class="font-bold text-2xl mb-4">
             Your colleagues aren't working
         </h1>
-        <p class="mb-4">
-            <em>And neither should you.</em> You are trying to access Stripey
-            outside of our regular working hours. We are unable to determine the
-            whereabouts of your colleagues, due to ethical considerations.
+        <p class="mb-4 leading-snug">
+            You are trying to access Stripey outside of our regular working hours.
+            Due to ethical considerations, we are unable to help you locate colleagues.
         </p>
         <p>
-            Go, and enjoy your time outside of work!
+            Looking for something to do? Try
+            <a href="http://findyourselfahobby.com/" class="text-blue-400 underline">a new hobby</a>.
         </p>
     </div>
 @endsection
