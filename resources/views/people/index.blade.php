@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('layouts/master')
 
 @section('nav')
     <div class="bg-blue-800 p-4 flex justify-between">

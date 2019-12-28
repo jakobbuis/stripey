@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('layouts/master')
 
 @section('main')
     <div class="h-screen w-screen overflow-hidden flex items-center justify-center" style="background: #edf2f7;">

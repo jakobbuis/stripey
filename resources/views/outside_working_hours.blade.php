@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('layouts/master')
 
 @section('main')
     <div class="m-4 max-w-md">
