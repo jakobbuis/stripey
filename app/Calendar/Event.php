@@ -26,7 +26,7 @@ class Event
     public function until(): ?CarbonImmutable
     {
         if ($this->isAllDay()) {
-            return CarbonImmutable::parse($this->googleEvent->end);
+            return CarbonImmutable::parse($this->googleEvent->end->date);
         }
 
         return CarbonImmutable::parse($this->googleEvent->end->dateTime);

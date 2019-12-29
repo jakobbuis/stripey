@@ -19,11 +19,15 @@ class Status
     {
         // Distinguish between working from home and meetings
         if ($event->isWorkingFromHome()) {
-            return new self('working_from_home', [
-                'until' => $event->until()->format('H:i'),
-            ]);
+            if ($event->isAllDay()) {
+                $until = 'on ' . $event->until()->nextWeekday()->formatLocalized('%A %e %B');
+            } else {
+                $until = 'at ' . $event->until()->format('H:i');
+            }
+            return new self('working_from_home', compact('until'));
         }
 
+        // In meeting
         return new self('in_meeting', [
             'until' => $event->until()->format('H:i'),
             'location' => $event->location(),
