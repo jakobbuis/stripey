@@ -43,6 +43,7 @@ class Calendar
         return $this->events
                     ->onAfwezig()
                     ->startsWith('Ziek:')
+                    ->attending($this->email)
                     ->count() > 0;
     }
 
@@ -51,6 +52,7 @@ class Calendar
         return $this->events
                     ->onAfwezig()
                     ->startsWith('Vrij:')
+                    ->attending($this->email)
                     ->count() > 0;
     }
 
@@ -59,6 +61,7 @@ class Calendar
         return $this->events
                     ->onAfwezig()
                     ->startsWith('Vakantie:')
+                    ->attending($this->email)
                     ->count() > 0;
     }
 }
