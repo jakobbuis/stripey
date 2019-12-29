@@ -20,7 +20,7 @@ class Status
         // Distinguish between working from home and meetings
         if ($event->isWorkingFromHome()) {
             if ($event->isAllDay()) {
-                $until = 'on ' . $event->until()->nextWeekday()->formatLocalized('%A %e %B');
+                $until = 'on ' . $event->until()->subDay()->nextWeekday()->formatLocalized('%A %e %B');
             } else {
                 $until = 'at ' . $event->until()->format('H:i');
             }
