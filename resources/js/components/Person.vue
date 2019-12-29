@@ -1,5 +1,5 @@
 <template>
-    <div class="max-w-sm rounded overflow-hidden shadow-lg m-4 bg-white border-l-8" :class="statusColor">
+    <div class="max-w-lg rounded overflow-hidden shadow-lg m-4 bg-white border-l-8" :class="statusColor">
         <div class="px-6 py-4 flex">
             <div class="flex-none mr-4">
                 <img :src="person.avatar" class="rounded-full w-12" width="48" height="48" :alt="person.name">
