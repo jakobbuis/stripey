@@ -14,9 +14,14 @@ class Events extends Collection
     public function at(CarbonInterface $time): self
     {
         return $this->filter(function ($event) use ($time) {
+            // Include all-day events
+            if ($event->start->dateTime === null && $event->end->dateTime === null) {
+                return true;
+            }
+
+            // Otherwise, check start and end time for overlap
             $start = Carbon::parse($event->start->dateTime);
             $end = Carbon::parse($event->end->dateTime);
-
             return $time >= $start && $time <= $end;
         });
     }
