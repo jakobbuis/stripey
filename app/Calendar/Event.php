@@ -2,7 +2,7 @@
 
 namespace App\Calendar;
 
-use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Google_Service_Calendar_Event;
 
 /**
@@ -17,18 +17,19 @@ class Event
         $this->googleEvent = $googleEvent;
     }
 
-    public function until(): string
+    public function isAllDay(): bool
     {
-        if (!empty($this->googleEvent->end->dateTime)) {
-            // If an end time is set, use that
-            $end = Carbon::parse($this->googleEvent->end->dateTime);
-        } else {
-            // Otherwise use COB
-            $end = Carbon::parse($this->googleEvent->end->date);
-            $end->setTimeFromTimeString(config('time.cob'));
+        return $this->googleEvent->start->dateTime === null
+                && $this->googleEvent->end->dateTime === null;
+    }
+
+    public function until(): ?CarbonImmutable
+    {
+        if ($this->isAllDay()) {
+            return CarbonImmutable::parse($this->googleEvent->end);
         }
 
-        return $end->formatLocalized('%H:%M');
+        return CarbonImmutable::parse($this->googleEvent->end->dateTime);
     }
 
     public function summary(): ?string

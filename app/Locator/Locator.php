@@ -4,6 +4,7 @@ namespace App\Locator;
 
 use App\Calendar\Calendar;
 use App\Person;
+use Carbon\CarbonImmutable;
 
 class Locator
 {
@@ -32,11 +33,7 @@ class Locator
 
         $event = $calendar->currentEvent();
         if ($event) {
-            if ($event->isWorkingFromHome()) {
-                return Status::workingFromHome($event->until());
-            } else {
-                return Status::inMeeting($event->until(), $event->location(), $event->summary());
-            }
+            return Status::fromEvent($event);
         }
 
         return Status::atOffice();

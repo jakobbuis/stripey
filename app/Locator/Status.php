@@ -2,6 +2,9 @@
 
 namespace App\Locator;
 
+use App\Calendar\Event;
+use Carbon\CarbonImmutable;
+
 class Status
 {
     public $state;
@@ -12,9 +15,20 @@ class Status
         return new self('at_office');
     }
 
-    public static function inMeeting(string $until, ?string $location, ?string $summary): self
+    public static function fromEvent(Event $event): self
     {
-        return new self('in_meeting', compact('until', 'location', 'summary'));
+        // Distinguish between working from home and meetings
+        if ($event->isWorkingFromHome()) {
+            return new self('working_from_home', [
+                'until' => $event->until()->format('H:i'),
+            ]);
+        }
+
+        return new self('in_meeting', [
+            'until' => $event->until()->format('H:i'),
+            'location' => $event->location(),
+            'summary' => $event->summary(),
+        ]);
     }
 
     public static function outSick(): self
@@ -30,11 +44,6 @@ class Status
     public static function onVacation(): self
     {
         return new self('on_vacation');
-    }
-
-    public static function workingFromHome(string $until): self
-    {
-        return new self('working_from_home', compact('until'));
     }
 
     private function __construct(string $state, array $data = [])
