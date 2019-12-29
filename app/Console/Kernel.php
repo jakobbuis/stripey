@@ -26,8 +26,15 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command(LoadCalendars::class)->everyTenMinutes();
-        $schedule->command(RefreshStoredTokens::class)->everyFifteenMinutes();
+        $schedule->command(LoadCalendars::class)
+            ->everyTenMinutes()
+            ->weekdays()
+            ->between('08:30', '18:00');
+
+        $schedule->command(RefreshStoredTokens::class)
+            ->everyFifteenMinutes()
+            ->weekdays()
+            ->between('08:30', '18:00');
     }
 
     /**
