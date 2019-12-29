@@ -32,9 +32,9 @@ class Status
         return new self('on_vacation');
     }
 
-    public static function workingFromHome(): self
+    public static function workingFromHome(string $until): self
     {
-        return new self('working_from_home');
+        return new self('working_from_home', compact('until'));
     }
 
     private function __construct(string $state, array $data = [])
