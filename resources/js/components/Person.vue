@@ -18,10 +18,11 @@ import InMeeting from './status/InMeeting';
 import OutSick from './status/OutSick';
 import DayOff from './status/DayOff';
 import OnVacation from './status/OnVacation';
+import WorkingFromHome from './status/WorkingFromHome';
 
 export default {
     props: ['person'],
-    components: { AtOffice, InMeeting, OutSick, DayOff, OnVacation },
+    components: { AtOffice, InMeeting, OutSick, DayOff, OnVacation, WorkingFromHome },
 
     computed: {
         statusComponent() {
@@ -31,6 +32,7 @@ export default {
                 out_sick: 'out-sick',
                 day_off: 'day-off',
                 on_vacation: 'on-vacation',
+                working_from_home: 'working-from-home',
             }[this.person.status.state];
         },
 
@@ -41,6 +43,7 @@ export default {
                 out_sick: 'border-red-400',
                 day_off: 'border-red-400',
                 on_vacation: 'border-red-400',
+                working_from_home: 'border-green-400',
             }[this.person.status.state];
         },
     },

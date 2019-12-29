@@ -66,4 +66,9 @@ class Event
 
         return $location;
     }
+
+    public function isWorkingFromHome(): bool
+    {
+        return strpos(strtolower($this->summary()), 'thuiswerken') !== false;
+    }
 }

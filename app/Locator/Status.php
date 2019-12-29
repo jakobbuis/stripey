@@ -32,6 +32,11 @@ class Status
         return new self('on_vacation');
     }
 
+    public static function workingFromHome(): self
+    {
+        return new self('working_from_home');
+    }
+
     private function __construct(string $state, array $data = [])
     {
         $this->state = $state;

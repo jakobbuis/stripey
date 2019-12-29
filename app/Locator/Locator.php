@@ -32,11 +32,11 @@ class Locator
 
         $event = $calendar->currentEvent();
         if ($event) {
-            return Status::inMeeting(
-                $event->until(),
-                $event->location(),
-                $event->summary()
-            );
+            if ($event->isWorkingFromHome()) {
+                return Status::workingFromHome();
+            } else {
+                return Status::inMeeting($event->until(), $event->location(), $event->summary());
+            }
         }
 
         return Status::atOffice();
