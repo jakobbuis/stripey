@@ -29,13 +29,23 @@ class Calendar
 
     public function currentEvent(): ?Event
     {
-        $event = $this->events
+        $events = $this->events
                     ->at($this->now)
                     ->notTimewax()
-                    ->attending($this->email)
-                    ->first();
+                    ->attending($this->email);
 
-        return $event ? new Event($event) : null;
+        if ($events->count() === 0) {
+            return null;
+        } elseif ($events->count() === 1) {
+            return new Event($events->first());
+        }
+
+        // If we have multiple options, prefer the event that started last
+        return $events->map(function ($googleEvent) {
+            return new Event($googleEvent);
+        })->sort(function ($event) {
+            return $event->start()->getTimestamp();
+        })->first();
     }
 
     public function isOutSick(): bool

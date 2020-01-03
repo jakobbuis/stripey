@@ -23,6 +23,15 @@ class Event
                 && $this->googleEvent->end->dateTime === null;
     }
 
+    public function start(): CarbonImmutable
+    {
+        if ($this->isAllDay()) {
+            return CarbonImmutable::parse($this->googleEvent->start->date);
+        }
+
+        return CarbonImmutable::parse($this->googleEvent->start->dateTime);
+    }
+
     public function until(): ?CarbonImmutable
     {
         if ($this->isAllDay()) {
