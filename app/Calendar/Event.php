@@ -26,7 +26,7 @@ class Event
     public function start(): CarbonImmutable
     {
         if ($this->isAllDay()) {
-            return CarbonImmutable::parse($this->googleEvent->start->date);
+            return CarbonImmutable::parse($this->googleEvent->start->date)->setTimeFromTimeString(config('time.cob'));
         }
 
         return CarbonImmutable::parse($this->googleEvent->start->dateTime);
