@@ -53,7 +53,6 @@ class Calendar
         return $this->events
                     ->onAfwezig()
                     ->startsWith('Ziek:')
-                    ->attending($this->email)
                     ->count() > 0;
     }
 
